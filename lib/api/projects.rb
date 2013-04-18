@@ -548,6 +548,21 @@ module Gitlab
         key.delete
       end
 
-    end
+      # Delete a project
+      #   
+      # Parameters:
+      #   id (required) - The ID of a project
+      # Example Request:
+      #   DELETE /projects/:id
+      delete ":id" do
+        project = Project.find(params[:id])
+        if current_user.admin? and project.destroy
+          {message: "Project deleted successfully"}
+        else
+          {message: "Access denied"}
+        end 
+      end 
+
+end
   end
 end
