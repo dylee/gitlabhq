@@ -135,8 +135,9 @@ module Gitlab
       # Example Request:
       #   POST /projects/:id/members
       post ":id/members" do
-        authorize! :admin_project, user_project
+        authorize! :admin_project, user_project unless current_user.admin?
         required_attributes! [:user_id, :access_level]
+        user_project = Project.find(params[:id]) if current_user.admin?
 
         # either the user is already a team member or a new one
         team_member = user_project.team_member_by_id(params[:user_id])
